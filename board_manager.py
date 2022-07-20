@@ -47,22 +47,39 @@ class BoardManager():
     def configure_board(self):
         self.board = [
             Go(),
-            self.get_property_space(MEDITERRANEAN_AV),
+            self.get_real_estate_property(MEDITERRANEAN_AV),
             CommunityChest(),
-            self.get_property_space(BALTIC_AV),
+            self.get_real_estate_property(BALTIC_AV),
             Tax("Income Tax", 200),
-            self.get_property_space(ORIENTAL_AV),
+            self.get_real_estate_property(ORIENTAL_AV),
             Chance(),
-            self.get_property_space(VERMONT_AV),
-            self.get_property_space(CONNECTICUT_AV),
+            self.get_real_estate_property(VERMONT_AV),
+            self.get_real_estate_property(CONNECTICUT_AV),
             VisitingJail(),
-            FreeParking(),
+            # self.get_real_estate_property(ST_CHARLES_PLACE),
+            # self.get_real_estate_property(STATES_AV),
+            # self.get_real_estate_property(VIRGINIA_AV),
+            # self.get_real_estate_property(ST_JAMES_PLACE),
+            # self.get_real_estate_property(TENNESSEE_AV),
+            # self.get_real_estate_property(NEW_YORK_AV),
+            # FreeParking(),
+            # self.get_real_estate_property(KENTUCKY_AV),
+            # self.get_real_estate_property(INDIANA_AV),
+            # self.get_real_estate_property(ILLINOIS_AV),
+            # self.get_real_estate_property(ATLANTIC_AV),
+            # self.get_real_estate_property(VENTNOR_AV),
+            # self.get_real_estate_property(MARVIN_GARDENS),
             GoToJail(),
+            # self.get_real_estate_property(PACIFIC_AV),
+            # self.get_real_estate_property(NORTH_CAROLINA_AV),
+            # self.get_real_estate_property(PENNSYLVANIA_AV),
+            # self.get_real_estate_property(PARK_PLACE),
+            # self.get_real_estate_property(BOARDWALK),
         ]
 
 
-
-    def get_property_space(self,name):
+    # returns a buyable property by using the property name as a key for accessing the property object from the property info dictionary
+    def get_real_estate_property(self,name):
         property_config = self.property_info[name]
         return Property(property_config)
 
@@ -73,6 +90,8 @@ class BoardManager():
     def configure_chance_cards(self):
         pass
 
+    #  Loops through the names of all the real estate properties available for purchase and creates property configuration object
+    # for each property.  The property configuration object is then stored in a property info dictionary where it is indexed by its name
     def configure_properties(self):
         for name in BoardManager.PROPERTY_NAMES:
             prop_config = None

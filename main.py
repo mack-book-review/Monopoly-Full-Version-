@@ -3,12 +3,13 @@ from property import Property
 from player import Player
 
 from board_manager import BoardManager
+from constants import *
 
 board_manager = BoardManager()
 
 available_players = [
     Player("Michael Anderson",1),
-    Player("Computer", 2)
+    Player("Sam Spade", 2)
 ]
 
 players = []
@@ -27,6 +28,7 @@ def initialize_players(starting_money):
         player.jail_wait_turns = 0
         player.owned_properties = []
         player.money = starting_money
+        player.is_first_turn = True
         players.append(player)
 
     current_player_index = random.randint(0,len(players)-1)
@@ -74,14 +76,17 @@ def run_player_turn(current_player):
             if choice in ["y","yes","yeah","yup"]:
                 current_player.exit_jail_cards -= 1
                 current_player.in_jail = False
+                current_player.jail_wait_turns = 0
                 print("You used one of your get out of jail free cards. Congratulations, you're out of the slammer")
-                run_player_turn()
+                run_player_turn(current_player)
                 return
         else:
             current_player.jail_wait_turns += 1
             if current_player.jail_wait_turns > 2:
                 print("However, you've done your time.  You're free to leave jail now")
-                run_player_turn()
+                current_player.jail_wait_turns = 0
+                current_player.in_jail = False
+                run_player_turn(current_player)
                 return
             print("You've waited {} turns while in jail".format(current_player.jail_wait_turns))
     else:
@@ -96,18 +101,28 @@ def run_player_turn(current_player):
         current_location_index = current_player.location
         new_location_index = (current_location_index + die1 + die2) % len(board_manager.board)
 
+        #Testing Code
+
+        print("{} rolled a {} and a {}".format(current_player.name,die1,die2))
+        if DEBUG:
+            print("Current location index: {}".format(current_location_index))
+            print("New location index: {}".format(new_location_index))
+            print("Board length: {}".format(len(board_manager.board)))
+
         #check if passed go
         if current_location_index + die1 + die2 > len(board_manager.board):
             #player has passed go
             current_player.receive_money(200)
             print("You passed go and collected $200.  You now have ${}".format(current_player.money))
-        elif current_location_index == 0 and new_location_index > 0:
+        elif not current_player.is_first_turn and current_location_index == 0 and new_location_index > 0:
             #player is already on go but hasn't passed it yet
             current_player.receive_money(200)
             print("You passed go and collected $200.  You now have ${}".format(current_player.money))
 
         time.sleep(1)
 
+        if current_player.is_first_turn:
+            current_player.is_first_turn = False
 
         current_player.location = new_location_index
         new_location = board_manager.board[new_location_index]
@@ -115,8 +130,8 @@ def run_player_turn(current_player):
         if new_location.is_property:
             print(new_location.get_message())
             if new_location.is_owned:
-                if current_player.has_property(new_location.name):
-                    print("You already own this property.".format(new_location.name))
+                if current_player.has_property(new_location):
+                    print("You already own this property.".format(new_location.get_name()))
                 else:
                     for player in players:
                         if player.id == new_location.owner_id:
@@ -125,20 +140,21 @@ def run_player_turn(current_player):
                     property_owner.receive_money(rent_amount)
                     current_player.pay_money(rent_amount)
                     print("This property is owned by {}.  You paid ${} to the owner".format(
-                        new_location.name,property_owner.name,rent_amount
+                        property_owner.name,rent_amount
                     ))
                     check_player_elimination(current_player)
             else:
                 print("This property ({}) is not owned by anyone.".format(new_location.get_name()))
                 choice = input("Do you wish to buy this property (y/n)?")
                 if choice.lower() in ["yes","y","yeah","yup"]:
-                    if current_player.money >= new_location.cost:
-                        current_player.pay_money(new_location.cost)
+                    if current_player.money >= new_location.get_cost():
+                        current_player.pay_money(new_location.get_cost())
                         current_player.owned_properties.append(new_location)
+                        new_location.sell_to_player(current_player)
                         new_location.owner_id = current_player.id
                         print("You just purchased {} for ${}.  You now have ${} left".format(
-                            new_location.name,
-                            new_location.cost,
+                            new_location.get_name(),
+                            new_location.get_cost(),
                             current_player.money
                         ))
                     else:
@@ -173,8 +189,12 @@ def run_player_turn(current_player):
             print(new_location.get_message())
         elif new_location.is_goto_jail:
             print(new_location.get_message())
+            current_player.in_jail = True
+            return
 
         if die1 == die2:
+            print()
+            print("Since you rolled doubles, you get another turn!")
             roll_again = True
 
         if len(players) <= 1:
@@ -318,20 +338,24 @@ def get_next_player():
         current_player_index = 0
 
 def play_game():
-    global is_game_over
+    global is_game_over,current_player_index
     initialize_players(600)
     print("================= Let's Play Monopoly! ====================")
 
     while not is_game_over:
         current_player = players[current_player_index]
+
+
         print("It is {} (i.e. Player {})'s turn. ".format(current_player.name,current_player.id))
         time.sleep(1)
-        current_player = players[current_player_index]
         if current_player.is_computer:
             run_computerAI_turn(current_player)
         else:
             run_player_turn(current_player)
         get_next_player()
+        print()
+        input("Press any key to continue...")
+        print()
 
 
     winner = players[0]

@@ -19,6 +19,9 @@ class Property(BoardSpace):
         # property configuration defines essential characteristics of a given property
         self.property_configuration = property_configuration
 
+    def sell_to_player(self,player):
+        self.is_owned = True
+        self.owner_id = player.id
 
     def has_improvements(self):
         return self.number_hotels > 0 or self.number_houses > 0

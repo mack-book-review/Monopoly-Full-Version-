@@ -8,6 +8,7 @@ class Player():
         self.id = id
         self.money = 500
         self.location = 0
+        self.is_first_turn = True
 
         self.owned_properties = []
         self.prop_info = {
@@ -70,6 +71,9 @@ class Player():
     def get_property_set(self,group_color):
         return [property for property in self.owned_properties if property.get_group_color() == group_color]
 
+    def has_consolidated_property(self):
+        return len([prop for prop in self.owned_properties if prop.is_consolidated]) > 0
+
     def purchase_property(self,property):
         property.is_owned = True
         self.money -= property.cost
@@ -94,7 +98,7 @@ class Player():
                         prop.is_consolidated = True
 
     def has_property(self,property):
-        return self.owned_properties.index(property) != -1
+        return property in self.owned_properties
 
     def receive_money(self,amount):
         self.money += amount
@@ -104,4 +108,4 @@ class Player():
     
 
     def can_make_improvements(self):
-        return len(self.owned_properties) > 0
+        return self.has_consolidated_property()
