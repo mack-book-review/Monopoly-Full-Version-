@@ -340,6 +340,7 @@ def get_next_player():
 def play_game():
     global is_game_over,current_player_index
     initialize_players(600)
+    board_manager.reset_board()
     print("================= Let's Play Monopoly! ====================")
 
     while not is_game_over:
@@ -354,6 +355,12 @@ def play_game():
             run_player_turn(current_player)
         get_next_player()
         print()
+        for player in players:
+            check_player_elimination(player)
+            if len(players) == 1:
+                is_game_over = True
+
+
         input("Press any key to continue...")
         print()
 
@@ -380,8 +387,7 @@ def main():
     
         if user_choice in ["y","yes","yeah","yup"]:
             is_game_over = False
-            initialize_players(600)
-            board_manager.reset_board()
+
         elif user_choice in ["n","no","nope","naw"]:
             break 
     
