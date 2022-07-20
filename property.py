@@ -4,7 +4,7 @@ from  property_configuration import PropertyConfiguration
 class Property(BoardSpace):
 
     def __init__(self,property_configuration):
-        super.__init__()
+        super().__init__()
 
         # designate this boardspace as a property
         self.is_property = True
@@ -16,7 +16,7 @@ class Property(BoardSpace):
         self.number_houses = 0
         self.number_hotels = 0
 
-        # property configuration defines essnetial characteristics of a given property
+        # property configuration defines essential characteristics of a given property
         self.property_configuration = property_configuration
 
 
@@ -84,7 +84,7 @@ class Property(BoardSpace):
         self.number_hotels += 1
 
     def get_message(self):
-        return "You landed on {}".format(self.name)
+        return "You landed on {}".format(self.get_name())
 
     def __str__(self):
         return "{}\t{}\t{}\t{}".format(self.get_name(),self.get_cost(),self.number_houses,self.number_hotels)

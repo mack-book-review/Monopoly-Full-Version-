@@ -17,6 +17,7 @@ class PropertyConfiguration():
 
         #basic information
         self.name = name
+        self.group_color = group_color
         self.cost = cost
 
         #base rent

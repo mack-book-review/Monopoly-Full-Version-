@@ -101,3 +101,7 @@ class Player():
 
     def pay_money(self,amount):
         self.money -= amount
+    
+
+    def can_make_improvements(self):
+        return len(self.owned_properties) > 0

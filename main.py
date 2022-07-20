@@ -66,7 +66,7 @@ def make_improvements(player):
 def run_player_turn(current_player):
     global current_player_index, is_game_over
     roll_again = False
-
+   
     if current_player.in_jail:
         print("You are still in jail.")
         if current_player.exit_jail_cards > 0:
@@ -86,13 +86,14 @@ def run_player_turn(current_player):
             print("You've waited {} turns while in jail".format(current_player.jail_wait_turns))
     else:
 
-        choice = input("Do you wish to make improvements (y/n)?").lower()
-        if choice in ["yes","y","yeah","yup","sure","okay"]:
-            make_improvements(current_player)
+        if current_player.can_make_improvements():
+            choice = input("Do you wish to make improvements (y/n)?").lower()
+            if choice in ["yes","y","yeah","yup","sure","okay"]:
+                make_improvements(current_player)
 
         die1 = random.randint(2, 6)
         die2 = random.randint(2, 6)
-
+        current_location_index = current_player.location
         new_location_index = (current_location_index + die1 + die2) % len(board_manager.board)
 
         #check if passed go
@@ -106,6 +107,7 @@ def run_player_turn(current_player):
             print("You passed go and collected $200.  You now have ${}".format(current_player.money))
 
         time.sleep(1)
+
 
         current_player.location = new_location_index
         new_location = board_manager.board[new_location_index]
@@ -127,7 +129,7 @@ def run_player_turn(current_player):
                     ))
                     check_player_elimination(current_player)
             else:
-                print("This property is not owned by anyone.".format(new_location.name))
+                print("This property ({}) is not owned by anyone.".format(new_location.get_name()))
                 choice = input("Do you wish to buy this property (y/n)?")
                 if choice.lower() in ["yes","y","yeah","yup"]:
                     if current_player.money >= new_location.cost:
@@ -180,7 +182,7 @@ def run_player_turn(current_player):
             return
 
         if roll_again:
-            run_player_turn(current_player_index)
+            run_player_turn(players[current_player_index])
 
 
 
@@ -345,10 +347,21 @@ def main():
         play_game()
         print("===================================================")
         user_choice = input("Do you want to play again (y/n)? ").lower()
+        valid = False
+        while not valid:
+            if user_choice in ["y","yes","yeah","yup","n","no","nope","naw"]:
+                valid = True 
+            else:
+                print("Invalid choice.  Please type 'y' to continue or 'n' to stop")
+    
         if user_choice in ["y","yes","yeah","yup"]:
             is_game_over = False
             initialize_players(600)
             board_manager.reset_board()
+        elif user_choice in ["n","no","nope","naw"]:
+            break 
+    
+    print("Thanks for playing Monopoly!")
 
 
 

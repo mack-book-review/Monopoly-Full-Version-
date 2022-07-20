@@ -3,32 +3,34 @@ from property import Property
 from fee import Tax,Utility
 from placeholder import Go,CommunityChest,Chance,VisitingJail,GoToJail,FreeParking
 from community_card import CommunityCard,ChanceCard
+from constants import * 
 
 class BoardManager():
 
     PROPERTY_NAMES = [
-        "Mediterranean Avenue",
-        "Baltic Avenue",
-        "Oriental Avenue",
-        "Vermont Avenue",
-        "Connecticut Avenue",
-        "St. Charles Place",
-        "States Avenue",
-        "Virginia Avenue",
-        "St. James Place",
-        "Tennessee Avenue",
-        "New York Avenue",
-        "Kentucky Avenue",
-        "Indiana Avenue",
-        "Illinois Avenue",
-        "Atlantic Avenue",
-        "Ventnor Avenue",
-        "Marvin Gardens",
-        "Pacific Avenue",
-        "North Carolina Avenue",
-        "Pennsylvania Avenue",
-        "Park Place",
-        "Boardwalk"]
+        MEDITERRANEAN_AV,
+        BALTIC_AV,
+        ORIENTAL_AV,
+        VERMONT_AV,
+        CONNECTICUT_AV,
+        ST_CHARLES_PLACE,
+        STATES_AV,
+        VIRGINIA_AV,
+        ST_JAMES_PLACE,
+        TENNESSEE_AV,
+        NEW_YORK_AV,
+        KENTUCKY_AV,
+        INDIANA_AV,
+        ILLINOIS_AV,
+        ATLANTIC_AV,
+        VENTNOR_AV,
+        MARVIN_GARDENS,
+        PACIFIC_AV,
+        NORTH_CAROLINA_AV,
+        PENNSYLVANIA_AV,
+        PARK_PLACE,
+        BOARDWALK
+        ]
 
 
     def __init__(self):
@@ -45,15 +47,14 @@ class BoardManager():
     def configure_board(self):
         self.board = [
             Go(),
-            self.get_property_space("Mediterranean Avenue"),
+            self.get_property_space(MEDITERRANEAN_AV),
             CommunityChest(),
-            self.get_property_space("Baltic Avenue"),
+            self.get_property_space(BALTIC_AV),
             Tax("Income Tax", 200),
-            self.get_property_space("Reading Railroad"),
-            self.get_property_space("Oriental Avenue"),
+            self.get_property_space(ORIENTAL_AV),
             Chance(),
-            self.get_property_space("Vermont Avenue"),
-            self.get_property_space("Connecticut Avenue"),
+            self.get_property_space(VERMONT_AV),
+            self.get_property_space(CONNECTICUT_AV),
             VisitingJail(),
             FreeParking(),
             GoToJail(),
@@ -75,54 +76,55 @@ class BoardManager():
     def configure_properties(self):
         for name in BoardManager.PROPERTY_NAMES:
             prop_config = None
-            if name == "Mediterranean Avenue":
+            if name == MEDITERRANEAN_AV:
                 # prop config -> PropertyConfiguration(name,group_color,cost,base_rent,mortgage_value,...)
                 prop_config = PropertyConfiguration(name,"brown",60,2,50,50,30,10,30,90,160,250)
-            elif name == "Baltic Avenue":
+            elif name == BALTIC_AV:
                 prop_config = PropertyConfiguration(name,"brown",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Oriental Avenue":
+            elif name == ORIENTAL_AV:
                 prop_config = PropertyConfiguration(name,"lightblue",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Vermont Avenue":
+            elif name == VERMONT_AV:
                 prop_config = PropertyConfiguration(name,"lightblue",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Connecticut Avenue":
+            elif name == CONNECTICUT_AV:
                 prop_config = PropertyConfiguration(name,"lightblue",60,4,50,50,30,20,60,180,320,450)
-            elif name == "St. Charles Place":
+            elif name == ST_CHARLES_PLACE:
                 prop_config = PropertyConfiguration(name,"orange",60,4,50,50,30,20,60,180,320,450)
-            elif name == "States Avenue":
+            elif name == STATES_AV:
                 prop_config = PropertyConfiguration(name,"orange",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Virginia Avenue":
+            elif name == VIRGINIA_AV:
                 prop_config = PropertyConfiguration(name,"orange",60,4,50,50,30,20,60,180,320,450)
-            elif name == "St. James Place":
+            elif name ==  ST_JAMES_PLACE:
                 prop_config = PropertyConfiguration(name,"brown",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Tennessee Avenue":
+            elif name == TENNESSEE_AV:
                 prop_config = PropertyConfiguration(name,"brown",60,4,50,50,30,20,60,180,320,450)
-            elif name == "New York Avenue":
+            elif name == NEW_YORK_AV:
                 prop_config = PropertyConfiguration(name,"brown",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Kentucky Avenue":
+            elif name == KENTUCKY_AV:
                 prop_config = PropertyConfiguration(name,"brown",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Indiana Avenue":
+            elif name == INDIANA_AV:
                 prop_config = PropertyConfiguration(name,"brown",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Illinois Avenue":
+            elif name == ILLINOIS_AV:
                 prop_config = PropertyConfiguration(name,"brown",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Atlantic Avenue":
+            elif name == ATLANTIC_AV:
                 prop_config = PropertyConfiguration(name,"yellow",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Ventnor Avenue":
+            elif name == VENTNOR_AV:
                 prop_config = PropertyConfiguration(name,"yellow",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Marvins Garden":
+            elif name == MARVIN_GARDENS:
                 prop_config = PropertyConfiguration(name,"yellow",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Pacific Avenue":
+            elif name == PACIFIC_AV:
                 prop_config = PropertyConfiguration(name,"green",60,4,50,50,30,20,60,180,320,450)
-            elif name == "North Caroliona Avenue":
+            elif name == NORTH_CAROLINA_AV:
                 prop_config = PropertyConfiguration(name,"green",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Pennsylvania Avenue":
+            elif name == PENNSYLVANIA_AV:
                 prop_config = PropertyConfiguration(name,"green",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Park Place":
+            elif name == PARK_PLACE:
                 prop_config = PropertyConfiguration(name,"darkblue",60,4,50,50,30,20,60,180,320,450)
-            elif name == "Boardwalk":
+            elif name == BOARDWALK:
                 prop_config = PropertyConfiguration(name,"darkblue",60,4,50,50,30,20,60,180,320,450)
 
-            property = Property(prop_config)
-            self.property_info[name] = property
+
+           
+            self.property_info[name] = prop_config
 
     def reset_board(self):
         for space in self.board:
