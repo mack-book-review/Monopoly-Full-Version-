@@ -10,26 +10,37 @@ class GameManager:
         self.player_manager = PlayerManager()
         self.is_game_over = False
 
+
+    def check_if_has_passed_go(self,current_player, new_location_index,current_location_index,die1,die2):
+        if current_location_index + die1 + die2 > len(self.board_manager.board):
+            # player has passed go
+            current_player.receive_money(200)
+            print("{} passed go and collected $200.  You now have ${}".format(current_player.name,current_player.money))
+        elif not current_player.is_first_turn and current_location_index == 0 and new_location_index > 0:
+            # player is already on go but hasn't passed it yet
+            current_player.receive_money(200)
+            print("{} passed go and collected $200.  You now have ${}".format(current_player.name,current_player.money))
+
     def in_jail(self,current_player):
         if current_player.in_jail:
-            print("You are still in jail.")
+            print("{} is still in jail.".format(current_player.name))
             if current_player.exit_jail_cards > 0:
-                choice = input("You have a get out of jail free card.  Would you like to use it (y/n)? ").lower()
+                choice = input("{} have a get out of jail free card.  Would you like to use it (y/n)? ".format(current_player.name)).lower()
                 if choice in VALID_AFFIRMATIVES:
                     current_player.exit_jail_cards -= 1
                     current_player.in_jail = False
                     current_player.jail_wait_turns = 0
-                    print("You used one of your get out of jail free cards. Congratulations, you're out of the slammer")
+                    print("{} used one of their get out of jail free cards. Congratulations, you're out of the slammer".format(current_player.name))
 
                     return False
             else:
                 current_player.jail_wait_turns += 1
                 if current_player.jail_wait_turns > 2:
-                    print("However, you've done your time.  You're free to leave jail now")
+                    print("However, {} has done their time and is free to leave jail now".format(current_player.name))
                     current_player.jail_wait_turns = 0
                     current_player.in_jail = False
                     return False
-                print("You've waited {} turns while in jail".format(current_player.jail_wait_turns))
+                print("{} has waited {} turns while in jail".format(current_player.name,current_player.jail_wait_turns))
 
             return True
 
@@ -62,14 +73,7 @@ class GameManager:
                 print("Board length: {}".format(len(self.board_manager.board)))
 
             # check if passed go
-            if current_location_index + die1 + die2 > len(self.board_manager.board):
-                # player has passed go
-                current_player.receive_money(200)
-                print("You passed go and collected $200.  You now have ${}".format(current_player.money))
-            elif not current_player.is_first_turn and current_location_index == 0 and new_location_index > 0:
-                # player is already on go but hasn't passed it yet
-                current_player.receive_money(200)
-                print("You passed go and collected $200.  You now have ${}".format(current_player.money))
+            self.check_if_has_passed_go(current_player, new_location_index, current_location_index, die1, die2)
 
             time.sleep(1)
 
@@ -83,7 +87,7 @@ class GameManager:
                 print(new_location.get_message())
                 if new_location.is_owned:
                     if current_player.has_property(new_location):
-                        print("You already own this property.".format(new_location.get_name()))
+                        print("{} already owns this property.".format(current_player.name,new_location.get_name()))
                     else:
                         for player in self.player_manager.players:
                             if player.id == new_location.owner_id:
@@ -91,8 +95,8 @@ class GameManager:
                         rent_amount = new_location.get_rent()
                         property_owner.receive_money(rent_amount)
                         current_player.pay_money(rent_amount)
-                        print("This property is owned by {}.  You paid ${} to the owner".format(
-                            property_owner.name, rent_amount
+                        print("This property is owned by {}.  {} paid ${} to the owner".format(
+                            property_owner.name, current_player.name,rent_amount
                         ))
                         self.player_manager.check_player_elimination(current_player)
                 else:
@@ -110,9 +114,9 @@ class GameManager:
                                 current_player.money
                             ))
                         else:
-                            print("You do not have enough money to afford this property")
+                            print("{} does not have enough money to afford this property".format(current_player.name))
                     else:
-                        print("You decided not to purchase the property")
+                        print("{} decided not to purchase the property".format(current_player.name))
 
 
             elif new_location.is_tax:
@@ -130,7 +134,7 @@ class GameManager:
                                                                      current_player.money))
                 self.player_manager.check_player_elimination(current_player)
             elif new_location.is_go:
-                print(new_location.get_message())
+                print("{} landed on Go!".format(current_player.name))
             elif new_location.is_community_chest:
                 pass
             elif new_location.is_chance:
@@ -146,7 +150,7 @@ class GameManager:
 
             if die1 == die2:
                 print()
-                print("Since you rolled doubles, you get another turn!")
+                print("Since {} rolled doubles, they get another turn!".format(current_player.name))
                 roll_again = True
 
             if len(self.player_manager.players) <= 1:
@@ -181,18 +185,8 @@ class GameManager:
             new_location_index = (current_location_index + die1 + die2) % len(self.board_manager.board)
 
             # check if passed go
-            if current_location_index + die1 + die2 > len(self.board_manager.board):
-                # player has passed go
-                current_player.receive_money(200)
-                print(
-                    "{} passed go and collected $200.  {} now has ${}".format(current_player.name, current_player.name,
-                                                                              current_player.money))
-            elif current_location_index == 0 and new_location_index > 0:
-                # player is already on go but hasn't passed it yet
-                current_player.receive_money(200)
-                print(
-                    "{} passed go and collected $200.  {} now have ${}".format(current_player.name, current_player.name,
-                                                                               current_player.money))
+            self.check_if_has_passed_go(current_player, new_location_index, current_location_index, die1, die2)
+
 
             time.sleep(1)
 
@@ -224,10 +218,11 @@ class GameManager:
                             current_player.pay_money(new_location.get_cost())
                             current_player.owned_properties.append(new_location)
                             new_location.owner_id = current_player.id
-                            print("{} just purchased {} for ${}.  You now have ${} left".format(
+                            print("{} just purchased {} for ${}.  {} now have ${} left".format(
                                 current_player.name,
                                 new_location.get_name(),
                                 new_location.get_cost(),
+                                current_player.name,
                                 current_player.money
                             ))
                         else:
@@ -242,7 +237,7 @@ class GameManager:
                 print("Player {} (i.e. {}) currently has ${}".format(current_player.id,
                                                                      current_player.name,
                                                                      current_player.money))
-                self.check_player_elimination(current_player)
+                self.player_manager.check_player_elimination(current_player)
             elif new_location.is_utility:
                 print(new_location.get_message())
                 current_player.pay_money(new_location.get_fee_amount())
@@ -264,7 +259,9 @@ class GameManager:
                 print(new_location.get_message())
                 current_player.in_jail = True
                 return
+
             if die1 == die2:
+                print("Since {} rolled doubles, they get another turn!".format(current_player.name))
                 roll_again = True
 
             if len(self.player_manager.players) <= 1:
@@ -272,7 +269,7 @@ class GameManager:
                 return
 
             if roll_again:
-                self.run_player_turn(current_player)
+                self.run_computerAI_turn(current_player)
 
     def make_improvements(self,player):
         print("Here are the properties that you own")
