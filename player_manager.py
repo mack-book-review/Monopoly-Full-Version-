@@ -17,7 +17,7 @@ class PlayerManager():
             for i in range(num_players):
                 player_name = input("What is the name of Player {}?".format(i+1))
                 player_type = int(input("Is this player (1) a human or (2) an AI? "))
-                new_player = Player(i+1,player_name,player_type-1)
+                new_player = Player(player_name,i+1,player_type-1)
                 self.available_players.append(new_player)
         else:
             print("Getting default players....")
