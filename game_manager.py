@@ -154,7 +154,7 @@ class GameManager:
 
         roll_again = False
 
-        current_location_index = self.current_player_index
+        current_location_index = self.player_manager.current_player_index
 
         if current_player.in_jail:
             print("{} is still in jail.".format(current_player.name))
@@ -169,6 +169,8 @@ class GameManager:
                 current_player.jail_wait_turns += 1
                 if current_player.jail_wait_turns > 2:
                     print("However, they've done their time.  They're now free to leave jail")
+                    current_player.in_jail = False
+                    current_player.jail_wait_turns = 0
                     self.run_computerAI_turn(current_player)
                     return
                 print(
@@ -211,8 +213,8 @@ class GameManager:
             if new_location.is_property:
                 print(new_location.get_message())
                 if new_location.is_owned:
-                    if current_player.has_property(new_location.name):
-                        print("{} already own this property.".format(current_player.name, new_location.name))
+                    if current_player.has_property(new_location.get_name()):
+                        print("{} already own this property.".format(current_player.name, new_location.get_name()))
                     else:
                         for player in self.players:
                             if player.id == new_location.owner_id:
@@ -225,17 +227,17 @@ class GameManager:
                         ))
                         self.check_player_elimination(current_player)
                 else:
-                    print("This property is not owned by anyone.".format(new_location.name))
+                    print("This property is not owned by anyone.".format(new_location.get_name()))
                     choice = random.random()
                     if choice < 0.5:
 
-                        if current_player.money >= new_location.cost:
-                            current_player.pay_money(new_location.cost)
+                        if current_player.money >= new_location.get_cost():
+                            current_player.pay_money(new_location.get_cost())
                             current_player.owned_properties.append(new_location)
                             new_location.owner_id = current_player.id
                             print("You just purchased {} for ${}.  You now have ${} left".format(
-                                new_location.name,
-                                new_location.cost,
+                                new_location.get_name(),
+                                new_location.get_cost(),
                                 current_player.money
                             ))
                         else:
@@ -270,7 +272,8 @@ class GameManager:
                 print(new_location.get_message())
             elif new_location.is_goto_jail:
                 print(new_location.get_message())
-
+                current_player.in_jail = True
+                return
             if die1 == die2:
                 roll_again = True
 
@@ -279,7 +282,7 @@ class GameManager:
                 return
 
             if roll_again:
-                self.run_player_turn(self.player_manager.current_player_index)
+                self.run_player_turn(current_player)
 
     def make_improvements(self,player):
         print("Here are the properties that you own")

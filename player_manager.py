@@ -6,7 +6,7 @@ class PlayerManager():
     def __init__(self):
         self.available_players = [
             Player("Michael Anderson", 1),
-            Player("Sam Spade", 2)
+            Player("AI Bill", 2,True)
         ]
 
         self.players = []
