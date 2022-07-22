@@ -10,11 +10,7 @@ class GameManager:
         self.player_manager = PlayerManager()
         self.is_game_over = False
 
-
-    def run_player_turn(self,current_player):
-
-        roll_again = False
-
+    def in_jail(self,current_player):
         if current_player.in_jail:
             print("You are still in jail.")
             if current_player.exit_jail_cards > 0:
@@ -24,22 +20,32 @@ class GameManager:
                     current_player.in_jail = False
                     current_player.jail_wait_turns = 0
                     print("You used one of your get out of jail free cards. Congratulations, you're out of the slammer")
-                    self.run_player_turn(current_player)
-                    return
+
+                    return False
             else:
                 current_player.jail_wait_turns += 1
                 if current_player.jail_wait_turns > 2:
                     print("However, you've done your time.  You're free to leave jail now")
                     current_player.jail_wait_turns = 0
                     current_player.in_jail = False
-                    self.run_player_turn(current_player)
-                    return
+                    return False
                 print("You've waited {} turns while in jail".format(current_player.jail_wait_turns))
+
+            return True
+
+        return False
+
+    def run_player_turn(self,current_player):
+
+        roll_again = False
+
+        if self.in_jail(current_player):
+            return
         else:
 
             if current_player.can_make_improvements():
                 choice = input("Do you wish to make improvements (y/n)?").lower()
-                if choice in ["yes", "y", "yeah", "yup", "sure", "okay"]:
+                if choice in VALID_AFFIRMATIVES:
                     self.make_improvements(current_player)
 
             die1 = random.randint(2, 6)
@@ -156,25 +162,8 @@ class GameManager:
 
         current_location_index = self.player_manager.current_player_index
 
-        if current_player.in_jail:
-            print("{} is still in jail.".format(current_player.name))
-            if current_player.exit_jail_cards > 0:
-                current_player.exit_jail_cards -= 1
-                current_player.in_jail = False
-                print("{} used one of their get out of jail free cards. They're now out of the slammer".format(
-                    current_player.name))
-                self.run_computerAI_turn(current_player)
-                return
-            else:
-                current_player.jail_wait_turns += 1
-                if current_player.jail_wait_turns > 2:
-                    print("However, they've done their time.  They're now free to leave jail")
-                    current_player.in_jail = False
-                    current_player.jail_wait_turns = 0
-                    self.run_computerAI_turn(current_player)
-                    return
-                print(
-                    "{} has waited {} turns while in jail".format(current_player.name, current_player.jail_wait_turns))
+        if self.in_jail(current_player):
+            return
         else:
 
             # Check if computer has the available funds to make improvements
@@ -216,7 +205,7 @@ class GameManager:
                     if current_player.has_property(new_location.get_name()):
                         print("{} already own this property.".format(current_player.name, new_location.get_name()))
                     else:
-                        for player in self.players:
+                        for player in self.player_manager.players:
                             if player.id == new_location.owner_id:
                                 property_owner = player
                         rent_amount = new_location.get_rent()
@@ -235,7 +224,8 @@ class GameManager:
                             current_player.pay_money(new_location.get_cost())
                             current_player.owned_properties.append(new_location)
                             new_location.owner_id = current_player.id
-                            print("You just purchased {} for ${}.  You now have ${} left".format(
+                            print("{} just purchased {} for ${}.  You now have ${} left".format(
+                                current_player.name,
                                 new_location.get_name(),
                                 new_location.get_cost(),
                                 current_player.money
