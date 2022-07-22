@@ -206,7 +206,7 @@ class GameManager:
                         property_owner.receive_money(rent_amount)
                         current_player.pay_money(rent_amount)
                         print("This property is owned by {}.  {} paid ${} to the owner".format(
-                            new_location.name, current_player.name, property_owner.name, rent_amount
+                            new_location.get_name(), current_player.name, property_owner.name, rent_amount
                         ))
                         self.check_player_elimination(current_player)
                 else:
