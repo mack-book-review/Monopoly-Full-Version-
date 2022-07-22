@@ -1,0 +1,27 @@
+DEBUG = False
+VALID_CHOICES = ["y","yes","yeah","yup","n","no","nope","naw"]
+VALID_AFFIRMATIVES = ["y","yes","yeah","yup"]
+VALID_NEGATIVES = ["n","no","nope","naw"]
+
+MEDITERRANEAN_AV = "Mediterranean Avenue"
+BALTIC_AV = "Baltic Avenue"
+ORIENTAL_AV = "Oriental Avenue"
+VERMONT_AV = "Vermont Avenue"
+CONNECTICUT_AV = "Connecticut Avenue"
+ST_CHARLES_PLACE = "St. Charles Place"
+STATES_AV = "States Avenue"
+VIRGINIA_AV = "Virginia Avenue"
+ST_JAMES_PLACE = "St. James Place"
+TENNESSEE_AV = "Tennessee Avenue"
+NEW_YORK_AV = "New York Avenue"
+KENTUCKY_AV = "Kentucky Avenue"
+INDIANA_AV = "Indiana Avenue"
+ILLINOIS_AV = "Illinois Avenue"
+ATLANTIC_AV = "Atlantic Avenue"
+VENTNOR_AV = "Ventnor Avenue"
+MARVIN_GARDENS = "Marvin Gardens"
+PACIFIC_AV = "Pacific Avenue"
+NORTH_CAROLINA_AV = "North Carolina Avenue"
+PENNSYLVANIA_AV = "Pennsylvania Avenue"
+PARK_PLACE = "Park Place"
+BOARDWALK = "Boardwalk"
