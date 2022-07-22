@@ -301,6 +301,13 @@ class GameManager:
         else:
             print("Okay, let's continue with your current turn")
 
+
+    def check_game_over(self):
+        for player in self.player_manager.players:
+            self.player_manager.check_player_elimination(player)
+            if len(self.player_manager.players) == 1:
+                is_game_over = True
+
     def play_game(self):
         self.player_manager.initialize_players(600)
         self.board_manager.reset_board()
@@ -308,7 +315,6 @@ class GameManager:
 
         while not self.is_game_over:
             current_player = self.player_manager.players[self.player_manager.current_player_index]
-
             print("It is {} (i.e. Player {})'s turn. ".format(current_player.name, current_player.id))
             time.sleep(1)
             if current_player.is_computer:
@@ -317,10 +323,7 @@ class GameManager:
                 self.run_player_turn(current_player)
             self.player_manager.get_next_player()
             print()
-            for player in self.player_manager.players:
-                self.player_manager.check_player_elimination(player)
-                if len(self.player_manager.players) == 1:
-                    is_game_over = True
+            self.check_game_over()
 
             input("Press any key to continue...")
             print()
