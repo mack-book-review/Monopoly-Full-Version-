@@ -12,8 +12,8 @@ class Fee(BoardSpace):
     def get_name(self):
         return self.name
 
-    def get_message(self):
-        return "You must pay a {} of ${}".format(self.name,self.amount)
+    def get_message(self,player_name):
+        return "{} must pay a {} of ${}".format(player_name,self.name,self.amount)
 
 class Tax(Fee):
     def __init__(self,name,amount):

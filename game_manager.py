@@ -84,7 +84,7 @@ class GameManager:
             new_location = self.board_manager.board[new_location_index]
 
             if new_location.is_property:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
                 if new_location.is_owned:
                     if current_player.has_property(new_location):
                         print("{} already owns this property.".format(current_player.name,new_location.get_name()))
@@ -120,31 +120,31 @@ class GameManager:
 
 
             elif new_location.is_tax:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
                 current_player.pay_money(new_location.get_fee_amount())
                 print("Player {} (i.e. {}) currently has ${}".format(current_player.id,
                                                                      current_player.name,
                                                                      current_player.money))
                 self.player_manager.check_player_elimination(current_player)
             elif new_location.is_utility:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
                 current_player.pay_money(new_location.get_fee_amount())
                 print("Player {} (i.e. {}) currently has ${}".format(current_player.id,
                                                                      current_player.name,
                                                                      current_player.money))
                 self.player_manager.check_player_elimination(current_player)
             elif new_location.is_go:
-                print("{} landed on Go!".format(current_player.name))
+                print(new_location.get_message(current_player.name))
             elif new_location.is_community_chest:
                 pass
             elif new_location.is_chance:
                 pass
             elif new_location.is_free_parking:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
             elif new_location.is_visiting_jail:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
             elif new_location.is_goto_jail:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
                 current_player.in_jail = True
                 return
 
@@ -194,7 +194,7 @@ class GameManager:
             new_location = self.board_manager.board[new_location_index]
 
             if new_location.is_property:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
                 if new_location.is_owned:
                     if current_player.has_property(new_location.get_name()):
                         print("{} already own this property.".format(current_player.name, new_location.get_name()))
@@ -232,31 +232,31 @@ class GameManager:
 
 
             elif new_location.is_tax:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
                 current_player.pay_money(new_location.get_fee_amount())
                 print("Player {} (i.e. {}) currently has ${}".format(current_player.id,
                                                                      current_player.name,
                                                                      current_player.money))
                 self.player_manager.check_player_elimination(current_player)
             elif new_location.is_utility:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
                 current_player.pay_money(new_location.get_fee_amount())
                 print("Player {} (i.e. {}) currently has ${}".format(current_player.id,
                                                                      current_player.name,
                                                                      current_player.money))
                 self.check_player_elimination(current_player)
             elif new_location.is_go:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
             elif new_location.is_community_chest:
                 pass
             elif new_location.is_chance:
                 pass
             elif new_location.is_free_parking:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
             elif new_location.is_visiting_jail:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
             elif new_location.is_goto_jail:
-                print(new_location.get_message())
+                print(new_location.get_message(current_player.name))
                 current_player.in_jail = True
                 return
 

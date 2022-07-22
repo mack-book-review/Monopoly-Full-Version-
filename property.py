@@ -86,8 +86,8 @@ class Property(BoardSpace):
         self.number_houses -= 4
         self.number_hotels += 1
 
-    def get_message(self):
-        return "You landed on {}".format(self.get_name())
+    def get_message(self,player_name):
+        return "{} landed on {}".format(player_name,self.get_name())
 
     def __str__(self):
         return "{}\t{}\t{}\t{}".format(self.get_name(),self.get_cost(),self.number_houses,self.number_hotels)
