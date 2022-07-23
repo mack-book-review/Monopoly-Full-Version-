@@ -15,11 +15,11 @@ class GameManager:
         if current_location_index + die1 + die2 > len(self.board_manager.board):
             # player has passed go
             current_player.receive_money(200)
-            print("{} passed go and collected $200.  You now have ${}".format(current_player.name,current_player.money))
+            print("{} passed go and collected $200.  {} now has ${}".format(current_player.name,current_player.name,current_player.money))
         elif not current_player.is_first_turn and current_location_index == 0 and new_location_index > 0:
             # player is already on go but hasn't passed it yet
             current_player.receive_money(200)
-            print("{} passed go and collected $200.  You now have ${}".format(current_player.name,current_player.money))
+            print("{} passed go and collected $200.  {} now have ${}".format(current_player.name,current_player.name,current_player.money))
 
     def in_jail(self,current_player):
         if current_player.in_jail:
@@ -184,6 +184,7 @@ class GameManager:
 
             new_location_index = (current_location_index + die1 + die2) % len(self.board_manager.board)
 
+            print("{} rolled a {} and a {}".format(current_player.name,die1,die2))
             # check if passed go
             self.check_if_has_passed_go(current_player, new_location_index, current_location_index, die1, die2)
 
